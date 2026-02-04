@@ -2,5 +2,6 @@
 /backend/target/
 *.log
 
-
+node_modules/
+.env
 
