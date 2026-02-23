@@ -15,7 +15,7 @@ export default function DashNavbar() {
   return (
     <nav
       style={{
-        width: "215%",
+        width: "100%",
         position: "sticky",
         top: 0,
         zIndex: 1000,

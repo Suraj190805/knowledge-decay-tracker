@@ -43,7 +43,12 @@ export default function Analytics() {
     return <p style={{ padding: "20px" }}>Loading analytics...</p>;
   }
 
-  const { totalTopics, revisedThisWeek, strengthBreakdown, focusTopics } = stats;
+const {
+  totalTopics = 0,
+  revisedThisWeek = 0,
+  strengthBreakdown = { strong: 0, medium: 0, weak: 0 },
+  focusTopics = [],
+} = stats || {};
 
   const chartData = [
     { name: "Strong", value: strengthBreakdown.strong },
@@ -67,7 +72,7 @@ export default function Analytics() {
     <div
       style={{
         minHeight: "100vh",
-        width: "300%",
+        width: "100%",
         backgroundColor: "#ffffff",
         color: "#111827",
         padding: "40px",

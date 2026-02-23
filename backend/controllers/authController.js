@@ -7,10 +7,10 @@ const jwt = require("jsonwebtoken");
 // ===============================
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     // Validate input
-    if (!name || !email || !password) {
+    if (!username || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
 
     // Create user
     const user = await User.create({
-      name,
+      username,
       email,
       password: hashedPassword,
     });
@@ -49,33 +49,44 @@ exports.register = async (req, res) => {
 // ===============================
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    console.log("LOGIN BODY:", req.body);
 
-    // Validate input
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password required" });
+    const { identifier, password } = req.body;
+
+    if (!identifier || !password) {
+      return res.status(400).json({ error: "Username/Email and password required" });
     }
 
-    // Find user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      $or: [
+        { email: identifier },
+        { username: identifier }
+      ]
+    });
+
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
+console.log("USER FOUND:", user.username);
+console.log("ENTERED PASSWORD:", password);
+console.log("HASHED PASSWORD:", user.password);
 
-    // Create JWT
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+const isMatch = await bcrypt.compare(password, user.password);
+console.log("PASSWORD MATCH:", isMatch);
 
-    res.json({ token });
+if (!isMatch) {
+  return res.status(401).json({ error: "Invalid credentials" });
+}
+
+const token = jwt.sign(
+  { id: user._id },
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
+
+res.json({ token });
+
   } catch (error) {
     console.error("LOGIN ERROR:", error);
     res.status(500).json({ error: "Server error" });
