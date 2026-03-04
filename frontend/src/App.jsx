@@ -6,16 +6,26 @@ import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import OAuthSuccess from "./pages/OAuthSuccess";
 import SubjectFiles from "./pages/SubjectFiles"; // ✅ Added
-
+import QuizPage from "./pages/QuizPage";
+import SummaryPage from "./pages/SummaryPage";
 import RequireAuth from "./auth/RequireAuth";
 import RequireGuest from "./auth/RequireGuest";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* OAuth Redirect Route */}
+       <Route path="/quiz" element={<QuizPage />} />
+       <Route path="/summary" element={<SummaryPage />} />
+<Route
+  path="/profile"
+  element={
+    <RequireAuth>
+      <Profile />
+    </RequireAuth>
+  }
+/>        {/* OAuth Redirect Route */}
         <Route path="/oauth-success" element={<OAuthSuccess />} />
 
         {/* Guest-only routes */}

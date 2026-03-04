@@ -26,7 +26,6 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/login",
-    session: false,
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -48,7 +47,6 @@ router.get(
     res.redirect(`${frontendURL}/oauth-success?token=${token}`);
   }
 );
-
 /* ================= FACEBOOK AUTH ================= */
 
 // ✅ Step 3 — Start Facebook Login

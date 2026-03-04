@@ -9,7 +9,7 @@ require("./config/passport");
 
 const uploadRoutes = require("./routes/uploadRoutes");
 const connectDB = require("./config/db");
-
+const quizRoutes = require("./routes/quizRoutes");
 const authRoutes = require("./routes/authRoutes");
 const learningRoutes = require("./routes/learningRoutes");
 const revisionRoutes = require("./routes/revisionRoutes");
@@ -21,14 +21,24 @@ const app = express();
 
 /* ================= MIDDLEWARE ================= */
 
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,   // ✅ REQUIRED
+  })
+);
 app.use(express.json());
 
 app.use(
   session({
     secret: "oauthsecret",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",   // ✅ important
+    },
   })
 );
 
@@ -45,7 +55,7 @@ app.use("/api/analytics", analyticsRoutes);
 // ✅ File upload routes
 app.use("/api/files", uploadRoutes);
 app.use("/uploads", express.static("uploads"));
-
+app.use("/api/quiz", quizRoutes);
 /* ================= HEALTH CHECK ================= */
 
 app.get("/", (req, res) => {
