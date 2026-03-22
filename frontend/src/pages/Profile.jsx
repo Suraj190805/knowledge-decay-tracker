@@ -53,13 +53,6 @@ const projectStats = [
   { label: "Backend API", value: 66 },
 ];
 
-const profileInfo = [
-  { label: "Full Name", value: "Kenneth Valdez" },
-  { label: "Email", value: "fip@jukmuh.al" },
-  { label: "Phone", value: "(239) 816-9029" },
-  { label: "Mobile", value: "(320) 380-4539" },
-  { label: "Address", value: "Bay Area, San Francisco, CA" },
-];
 
 function ProgressBar({ value }) {
   return (
@@ -95,7 +88,38 @@ function ProjectStatusCard() {
 }
 
 export default function UserProfile() {
-  const [editing, setEditing] = useState(false);
+  
+const [editing, setEditing] = useState(false);
+const [editingLinks, setEditingLinks] = useState(false);
+const [links, setLinks] = useState(() => {
+  const saved = localStorage.getItem("socialLinks");
+  return saved ? JSON.parse(saved) : socialLinks;
+});
+const [profileInfo, setProfileInfo] = useState(() => {
+  const saved = localStorage.getItem("profileInfo");
+
+  return saved
+    ? JSON.parse(saved)
+    : [
+        { label: "Full Name", value: "Kenneth Valdez" },
+        { label: "Email", value: "fip@jukmuh.al" },
+        { label: "Phone", value: "(239) 816-9029" },
+        { label: "Mobile", value: "(320) 380-4539" },
+        { label: "Address", value: "Bay Area, San Francisco, CA" },
+      ];
+});
+useEffect(() => {
+  localStorage.setItem("profileInfo", JSON.stringify(profileInfo));
+}, [profileInfo]);
+useEffect(() => {
+  localStorage.setItem("socialLinks", JSON.stringify(links));
+}, [links]);
+const handleChange = (index, value) => {
+    const updated = [...profileInfo];
+    updated[index].value = value;
+    setProfileInfo(updated);
+  };
+ 
 
 const [profile, setProfile] = useState(() => {
   const saved = localStorage.getItem("profile");
@@ -241,43 +265,141 @@ useEffect(() => {
               }}
             >
               <span style={styles.infoLabel}>{item.label}</span>
-              <span style={styles.infoValue}>{item.value}</span>
-            </div>
+{editing ? (
+  <input
+    value={item.value}
+    onChange={(e) => handleChange(i, e.target.value)}
+    style={{
+      flex: 1,
+      padding: "6px",
+      border: "1px solid #ddd",
+      borderRadius: 4,
+      fontSize: 13
+    }}
+  />
+) : (
+  <span style={styles.infoValue}>{item.value}</span>
+)}            </div>
           ))}
           <div style={{ marginTop: 20 }}>
-            <button style={{ ...styles.btn, background: "#3cb6a0", color: "#fff", padding: "8px 24px" }}>
-              Edit
-            </button>
+           <button
+  style={{ ...styles.btn, background: "#3cb6a0", color: "#fff", padding: "8px 24px" }}
+  onClick={() => setEditing(!editing)}
+>
+  {editing ? "Save" : "Edit"}
+</button>
           </div>
         </div>
 
-        {/* Bottom-left: Social links */}
-        <div style={styles.card}>
-          {socialLinks.map((s, i) => (
-            <div
-              key={s.label}
-              style={{
-                ...styles.socialRow,
-                borderBottom: i < socialLinks.length - 1 ? "1px solid #f4f4f4" : "none",
-              }}
+      
+{/* Bottom-left: Social links */}
+<div style={styles.card}>
+
+  {/* Header */}
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 12,
+    }}
+  >
+    <h3 style={{ margin: 0 }}>Social Links</h3>
+
+    <button
+      onClick={() => setEditingLinks(!editingLinks)}
+      style={{
+        border: "none",
+        background: "transparent",
+        cursor: "pointer",
+        padding: 4
+      }}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="black"
+        strokeWidth="2"
+      >
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+      </svg>
+    </button>
+  </div>
+
+  {/* Social links list */}
+  {links.map((s, i) => {
+    return (
+      <div
+        key={s.label}
+        className="socialRow"
+        style={{
+          ...styles.socialRow,
+          borderBottom:
+            i < links.length - 1 ? "1px solid #f4f4f4" : "none",
+        }}
+      >
+
+        <span style={styles.socialIcon}>
+          {socialLinks[i].icon}
+        </span>
+
+        {editingLinks ? (
+
+          <input
+            value={s.value}
+            placeholder="Paste link..."
+            onChange={(e) => {
+              const updated = [...links];
+              updated[i].value = e.target.value;
+              setLinks(updated);
+            }}
+            style={{
+              flex: 1,
+              padding: "6px",
+              border: "1px solid #ddd",
+              borderRadius: 4,
+              fontSize: 13
+            }}
+          />
+
+        ) : (
+
+          <div className="socialText">
+
+            <span className="label">
+              {s.label}
+            </span>
+
+            <a
+              href={
+                s.value.startsWith("http")
+                  ? s.value
+                  : `https://${s.value}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link"
             >
-              <span style={styles.socialIcon}>{s.icon}</span>
-              <span style={styles.socialLabel}>{s.label}</span>
-              <span style={styles.socialValue}>{s.value}</span>
-            </div>
-          ))}
-        </div>
+              {s.value}
+            </a>
 
-        {/* Bottom-right: Two project status cards side by side */}
-        <div style={styles.projectsGrid}>
-          <ProjectStatusCard />
-          <ProjectStatusCard />
-        </div>
+          </div>
+
+        )}
+
       </div>
-    </div>
-  );
-}
+    );
+  })}
 
+</div>   {/* closes Social Links card */}
+</div>   {/* closes main grid */}
+    </div>
+    );
+  }
 const styles = {
   page: {
     fontFamily: "'Segoe UI', sans-serif",

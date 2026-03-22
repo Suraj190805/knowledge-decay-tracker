@@ -38,3 +38,38 @@
 .read-the-docs {
   color: #888;
 }
+.socialLink{
+  opacity:0;
+  transition: opacity 0.2s;
+}
+
+.socialRow:hover .socialLink{
+  opacity:1;
+}
+.socialText{
+  position: relative;
+  flex:1;
+}
+
+.socialText .label{
+  position:absolute;
+  left:0;
+  top:0;
+}
+
+.socialText .link{
+  position:absolute;
+  left:0;
+  top:0;
+  display:none;
+  color:#3b82f6;
+  text-decoration:none;
+}
+
+.socialRow:hover .label{
+  display:none;
+}
+
+.socialRow:hover .link{
+  display:inline;
+}
