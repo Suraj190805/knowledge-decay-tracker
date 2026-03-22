@@ -45,7 +45,7 @@ Knowledge-Decay-Tracker/
 ├── backend/         # Node.js backend
 ├── uploads/         # Uploaded files
 └── README.md
-'''
+```
 _______
 🧠 How It Works
 	1.	Upload study material (PDF/image)
@@ -59,7 +59,7 @@ _______
 	•	Review summaries
 
 ⸻
-
+```
 🎯 Future Improvements
 	•	Multi-language code execution console
 	•	LeetCode-style practice problems
