@@ -38,7 +38,7 @@ A full-stack AI-powered learning platform that helps students retain knowledge e
 ---
 
 ## 📂 Project Structure
-'''
+```
 Knowledge-Decay-Tracker/
 │
 ├── frontend/        # React frontend
@@ -59,7 +59,7 @@ _______
 	•	Review summaries
 
 ⸻
-```
+
 🎯 Future Improvements
 	•	Multi-language code execution console
 	•	LeetCode-style practice problems
