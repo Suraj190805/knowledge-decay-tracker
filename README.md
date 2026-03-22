@@ -38,13 +38,14 @@ A full-stack AI-powered learning platform that helps students retain knowledge e
 ---
 
 ## 📂 Project Structure
-
+'''
 Knowledge-Decay-Tracker/
 │
 ├── frontend/        # React frontend
 ├── backend/         # Node.js backend
 ├── uploads/         # Uploaded files
 └── README.md
+'''
 _______
 🧠 How It Works
 	1.	Upload study material (PDF/image)
